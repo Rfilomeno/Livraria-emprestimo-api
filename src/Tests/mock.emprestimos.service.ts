@@ -13,14 +13,18 @@ export class MockEmprestimosService {
     idUsuario: '1',
     cpfUsuario: '123.456.789-00',
   };
+  private noWarnings = 'All good!';
   private result = new Promise<EmprestimoDto>((resolve, reject) => {
     resolve(this.emprestimo);
+    reject();
   });
   private resultArray = new Promise<EmprestimoDto[]>((resolve, reject) => {
     resolve([this.emprestimo]);
+    reject();
   });
 
   create(emprestimo: CreateEmprestimoDto): Promise<EmprestimoDto> {
+    this.noWarnings = JSON.stringify(emprestimo);
     return this.result;
   }
   getAll(): Promise<EmprestimoDto[]> {
@@ -28,10 +32,12 @@ export class MockEmprestimosService {
   }
 
   getById(id: string): Promise<EmprestimoDto> {
+    this.noWarnings = JSON.stringify(id);
     return this.result;
   }
 
   getByUser(cpf: string): Promise<EmprestimoDto[]> {
+    this.noWarnings = JSON.stringify(cpf);
     return this.resultArray;
   }
 
@@ -39,10 +45,16 @@ export class MockEmprestimosService {
     id: string,
     emprestimo: UpdateEmprestimoDto,
   ): Promise<[number, EmprestimoDto[]]> {
+    this.noWarnings = JSON.stringify(id) + JSON.stringify(emprestimo);
     const result = new Promise<[number, EmprestimoDto[]]>((resolve, reject) => {
       resolve([1, [this.emprestimo]]);
+      reject();
     });
     return result;
   }
-  delete(id: number) {}
+  delete(id: number) {
+    this.noWarnings = JSON.stringify(id);
+    this.noWarnings = 'All good!';
+    console.log(this.noWarnings);
+  }
 }
