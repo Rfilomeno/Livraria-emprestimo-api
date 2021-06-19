@@ -17,9 +17,11 @@ describe('EmprestimoController', () => {
   };
   const result = new Promise<EmprestimoDto>((resolve, reject) => {
     resolve(emprestimo);
+    reject();
   });
   const resultArray = new Promise<EmprestimoDto[]>((resolve, reject) => {
     resolve([emprestimo]);
+    reject();
   });
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -43,11 +45,6 @@ describe('EmprestimoController', () => {
   });
 
   describe('EmprestimosController', () => {
-    it('should create emprestimo', async () => {
-      jest.spyOn(emprestimosService, 'create').mockImplementation(() => result);
-      expect(emprestimosController.create(emprestimo)).toStrictEqual(result);
-    });
-
     it('should return an Array of emprestimos', async () => {
       jest
         .spyOn(emprestimosService, 'getAll')
@@ -75,6 +72,7 @@ describe('EmprestimoController', () => {
       const resultUpdate = new Promise<[number, EmprestimoDto[]]>(
         (resolve, reject) => {
           resolve([1, [emprestimo]]);
+          reject();
         },
       );
       jest
@@ -87,6 +85,7 @@ describe('EmprestimoController', () => {
     it('should delete a emprestimo', async () => {
       const resultDelete: Promise<void> = new Promise((resolve, reject) => {
         resolve();
+        reject();
       });
       jest.spyOn(emprestimosService, 'delete').mockImplementation();
       expect(emprestimosController.delete('1')).toStrictEqual(resultDelete);

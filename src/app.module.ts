@@ -4,10 +4,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Emprestimo } from './Models/emprestimo.model';
 import { EmprestimosController } from './Controllers/emprestimos.controller';
 import { EmprestimosService } from './Services/emprestimos.service';
+import { SubscriberController } from './Subscriber/subscriber.controller';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.development.env'],
+      isGlobal: true,
+    }),
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: 'localhost',
@@ -20,12 +25,19 @@ import { EmprestimosService } from './Services/emprestimos.service';
     }),
     SequelizeModule.forFeature([Emprestimo]),
   ],
-  controllers: [EmprestimosController],
+  controllers: [EmprestimosController, SubscriberController],
   providers: [
     EmprestimosService,
+    EmprestimosController,
     {
       provide: 'IEmprestimosService',
       useClass: EmprestimosService,
+    },
+    {
+      provide: 'EVENT_HUB',
+      useValue: ClientProxyFactory.create({
+        transport: Transport.TCP,
+      }),
     },
   ],
 })
