@@ -54,16 +54,6 @@ export class EmprestimosController {
     return this.emprestimosService.getByUser(params.cpf);
   }
 
-  @Post() //TODO: Não será endpoint, emprestimos serão criados a partir de mensagem do outro serviço
-  @ApiResponse({
-    status: 201,
-    description: 'Cria/cadastra um emprestimo',
-    type: EmprestimoDto,
-  })
-  async create(@Body() emprestimo: EmprestimoDto) {
-    return this.emprestimosService.create(emprestimo);
-  }
-
   @Put()
   @ApiResponse({
     status: 200,
